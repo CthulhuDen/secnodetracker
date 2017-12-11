@@ -20,7 +20,7 @@ let curIdx = servers.indexOf(home);
 let curServer = home;
 const protocol = `${init.protocol}://`;
 let domain = `.${init.domain}`;
-let socket = io(protocol + curServer + domain, { multiplex: false });
+let socket = io(protocol + curServer + domain, { multiplex: false, family: 6 });
 let failoverTimer;
 
 //get cpu config
@@ -140,7 +140,7 @@ const setSocketEvents = () => {
 		returningHome = true;
 		console.log(logtime(), `Returning to home server ${curServer}.`);
 		socket.close();
-		socket = io(protocol + curServer + domain, { forceNew: true });
+		socket = io(protocol + curServer + domain, { forceNew: true, family: 6 });
 		setSocketEvents();
 		SecNode.socket = socket;
 		ident.con.cur = curServer;
@@ -206,7 +206,7 @@ const switchServer = (server) => {
 	curIdx = nextIdx;
 	console.log(logtime(), "Trying server: " + curServer);
 	socket.close();
-	socket = io.connect(protocol + curServer + domain);
+	socket = io.connect(protocol + curServer + domain, { family: 6 });
 	setSocketEvents();
 	SecNode.socket = socket;
 	ident.con.cur = curServer;
